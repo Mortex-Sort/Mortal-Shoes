@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Mortal Shoes</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial;
+}
+
+body{
+background:#0f0f0f;
+color:white;
+}
+
+/* NAVBAR */
+
+nav{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:20px;
+background:#000;
+flex-wrap:wrap;
+}
+
+.logo{
+font-size:26px;
+font-weight:bold;
+color:#ff2a2a;
+}
+
+nav a{
+color:white;
+text-decoration:none;
+margin-left:20px;
+}
+
+/* SEARCH BAR */
+
+.search-box{
+margin-top:10px;
+width:100%;
+text-align:center;
+}
+
+.search-box input{
+width:60%;
+padding:10px;
+border:none;
+border-radius:6px;
+}
+
+/* HERO */
+
+.hero{
+text-align:center;
+padding:70px 20px;
+}
+
+.hero h1{
+font-size:42px;
+}
+
+.hero p{
+color:#aaa;
+margin-top:10px;
+}
+
+/* TRENDING */
+
+.trending{
+text-align:center;
+padding:20px;
+font-size:22px;
+color:#ff2a2a;
+}
+
+/* PRODUCTS */
+
+.products{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:30px;
+padding:40px;
+}
+
+.card{
+background:#1a1a1a;
+border-radius:12px;
+padding:20px;
+text-align:center;
+transition:0.3s;
+}
+
+.card:hover{
+transform:translateY(-10px);
+box-shadow:0 10px 25px rgba(255,0,0,0.4);
+}
+
+.card img{
+width:100%;
+border-radius:10px;
+}
+
+.price{
+color:#ff4747;
+margin-top:10px;
+}
+
+button{
+margin-top:10px;
+padding:10px 20px;
+border:none;
+background:#ff2a2a;
+color:white;
+border-radius:6px;
+cursor:pointer;
+}
+
+/* CART BUTTON */
+
+.cart-btn{
+position:fixed;
+bottom:20px;
+right:20px;
+background:#ff2a2a;
+padding:15px;
+border-radius:50%;
+font-size:22px;
+}
+
+/* FOOTER */
+
+footer{
+background:#000;
+text-align:center;
+padding:20px;
+color:#aaa;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<nav>
+
+<div class="logo">Mortal Shoes</div>
+
+<div>
+<a href="index.html">Home</a>
+<a href="cart.html">Cart</a>
+<a href="admin_login.html">Admin</a>
+</div>
+
+</nav>
+
+<div class="search-box">
+
+<input
+type="text"
+id="search"
+placeholder="Search shoes..."
+onkeyup="searchProducts()">
+
+</div>
+
+<div class="hero">
+
+<h1>Step Into Power</h1>
+
+<p>Premium Quality Shoes by Mortal Shoes</p>
+
+</div>
+
+<div class="trending">
+
+🔥 Trending Shoes
+
+</div>
+
+<div class="products" id="products"></div>
+
+<a href="cart.html" class="cart-btn">🛒</a>
+
+<footer>
+
+© 2026 Mortal Shoes
+
+</footer>
+
+<script>
+
+let products =
+JSON.parse(localStorage.getItem("products")) || []
+
+let cart =
+JSON.parse(localStorage.getItem("cart")) || []
+
+function showProducts(list){
+
+let box=document.getElementById("products")
+
+box.innerHTML=""
+
+list.forEach((p,i)=>{
+
+box.innerHTML+=`
+
+<div class="card">
+
+<img src="${p.image}">
+
+<h3>${p.name}</h3>
+
+<p class="price">₹${p.price}</p>
+
+<button onclick="addCart(${i})">
+Add To Cart
+</button>
+
+</div>
+
+`
+
+})
+
+}
+
+function addCart(i){
+
+cart.push(products[i])
+
+localStorage.setItem("cart",JSON.stringify(cart))
+
+alert("Added to cart")
+
+}
+
+/* SEARCH FUNCTION */
+
+function searchProducts(){
+
+let text =
+document.getElementById("search")
+.value
+.toLowerCase()
+
+let filtered =
+products.filter(p =>
+p.name.toLowerCase().includes(text)
+)
+
+showProducts(filtered)
+
+}
+
+showProducts(products)
+
+</script>
+
+</body>
+</html>
