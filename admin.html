@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Admin Panel - Mortal Shoes</title>
+<style>
+body{font-family:Arial;background:#111;color:white;text-align:center;padding:20px;}
+input, button{padding:10px;margin:5px;border-radius:5px;}
+button{background:red;color:white;border:none;cursor:pointer;}
+.product-item{background:#222;padding:10px;margin:10px auto;border-radius:10px;width:300px;}
+img{max-width:150px;border-radius:5px;}
+</style>
+</head>
+<body>
+
+<h1>Mortal Shoes - Admin Panel 👟</h1>
+<button onclick="logout()">Logout</button>
+
+<h2>Add New Product</h2>
+<input id="name" placeholder="Shoe Name"><br>
+<input id="price" placeholder="Price"><br>
+<input type="file" id="image" accept="image/*"><br>
+<button onclick="addProduct()">Add Product</button>
+
+<h2>All Products</h2>
+<div id="list"></div>
+
+<script>
+if(localStorage.getItem("admin") !== "true"){ location = "admin_login.html"; }
+
+let products = JSON.parse(localStorage.getItem("products")) || [];
+
+function showProducts(){
+    let box = document.getElementById("list");
+    box.innerHTML = "";
+    products.forEach((p,i)=>{
+        box.innerHTML += `
+        <div class="product-item">
+            <img src="${p.image}" alt="${p.name}"><br>
+            <strong>${p.name}</strong> - ₹${p.price}<br>
+            <button onclick="del(${i})">Delete</button>
+        </div>
+        `;
+    });
+}
+showProducts();
+
+function addProduct(){
+    let name = document.getElementById("name").value;
+    let price = document.getElementById("price").value;
+    let file = document.getElementById("image").files[0];
+
+    if(!name || !price || !file){
+        alert("Fill all fields and select an image!");
+        return;
+    }
+
+    let reader = new FileReader();
+    reader.onload = function(){
+        products.push({ name, price, image: reader.result });
+        localStorage.setItem("products", JSON.stringify(products));
+        alert("Product Added ✅");
+        showProducts();
+        document.getElementById("name").value="";
+        document.getElementById("price").value="";
+        document.getElementById("image").value="";
+    }
+    reader.readAsDataURL(file);
+}
+
+function del(i){
+    if(confirm("Are you sure to delete this product?")){
+        products.splice(i,1);
+        localStorage.setItem("products",JSON.stringify(products));
+        showProducts();
+    }
+}
+
+function logout(){
+    localStorage.removeItem("admin");
+    location = "index.html";
+}
+</script>
+</body>
+</html>
